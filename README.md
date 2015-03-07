@@ -1,18 +1,72 @@
-JavaScript base template
-===============================================================================
+Install
+-------------------------------------------------------------------------------
+Just include recline.backend.papaparse.min.js in your html. See dependencies bellow.
 
-Included libraries
+```javascript
+<script type"text/javascript" src="dist/recline.backend.papaparse.min.js"></script>
+```
+
+Usage
 -------------------------------------------------------------------------------
 
-This template includes following libraries:
+### Parse a csv file from an input file.
 
-* lodash
-* javascript
-* moment
-* grunt
-* bootstrap
-* mustache
-* json2 for old browsers
+```javascript
+// Parse csv from local file.
+$("#csvfile").on("change", function(){
+  var fileDataset = new recline.Model.Dataset({
+    file:$("#csvfile").get(0).files[0],
+    backend: "papacsv"
+  });
+  fileDataset
+  .fetch()
+  .done(function(data){
+    console.log(data.records.toJSON());
+  });
+});
+```
+
+### Parse a csv file from a remote server.
+
+```javascript
+// Parse csv from a remote file.
+var remoteDataset = new recline.Model.Dataset({
+  url: "http://demo.getdkan.com/sites/default/files/us_foreclosures_jan_2012_by_state_0.csv",
+  backend: "papacsv"
+});
+remoteDataset
+.fetch()
+.done(function(data){
+  console.log(data);
+});
+```
+
+###Parse a csv from a string
+
+```javascript
+// Parse csv from string.
+var csv = '"Jones, Jay",10\n' +
+'"Xyz ""ABC"" O\'Brien",11:35\n' +
+'"Other, AN",12:35\n';
+
+var stringDataset = new recline.Model.Dataset({
+  data: csv,
+  backend: "papacsv"
+});
+stringDataset
+.fetch()
+.done(function(data){
+  console.log(data);
+});
+```
+
+Dependencies
+-------------------------------------------------------------------------------
+* underscore
+* Papa Parse
+* underscore.deferred (optional) - only needed if no jQuery
+
+## Examples
 
 Requirements
 -------------------------------------------------------------------------------
@@ -59,23 +113,3 @@ grunt build
 ```bash
 grunt lint
 ```
-
-Sublime Text Plugins
--------------------------------------------------------------------------------
-
-* Make sure you have already installed Sublime Text Package Control.
-* Press ⌘ + ⇧ + P.
-* Type `jshint gutter` and press `enter`.
-* Once installed, restart sublime and open the file you want to lint.
-* Press ⌘ + ⇧ + j to lint the file.
-* Optionally you may be interested in lint your code while editing, to achive that go to Tools > JSHint > Set Plugin Options and set lint_on_edit to true.
-
-Create github page
--------------------------------------------------------------------------------
-* Gihub page is built grabbing contents from examples directory and creating gh-pages branch with that.
-* To achive that just run:
-
-```bash
-make
-```
-
